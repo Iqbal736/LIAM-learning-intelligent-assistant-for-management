@@ -14,24 +14,38 @@ class AIMLAgent {
     this.knowledgeBase = {};
     this.conversationHistory = new Map();
     
+    // Rate limiting for Gemini API
+    this.lastApiCall = 0;
+    this.minApiInterval = 5000; // 5 seconds between API calls to avoid rate limits
+    this.rateLimitRetries = 0;
+    this.maxRetries = 3;
+    
     // Initialize Google Gemini AI
     const apiKey = process.env.GEMINI_API_KEY || 'AIzaSyBQmFySnKjg0GbjYHvUI6Pfpl-9e2GYYTY';
+    console.log('🔑 API Key available:', !!apiKey);
     if (!apiKey) {
       console.log('❌ GEMINI_API_KEY not found in environment variables.');
       console.log('📋 Please set your API key in .env file');
       this.genAI = null;
       this.model = null;
     } else {
-      this.genAI = new GoogleGenerativeAI(apiKey);
-      this.model = this.genAI.getGenerativeModel({ 
-        model: "gemini-2.5-flash",
-        generationConfig: {
-          temperature: 0.7,
-          topP: 0.9,
-          maxOutputTokens: 800,
-        }
-      });
-      console.log('✅ Google Gemini AI initialized successfully');
+      try {
+        this.genAI = new GoogleGenerativeAI(apiKey);
+        this.model = this.genAI.getGenerativeModel({ 
+          model: "gemini-2.5-flash",
+          generationConfig: {
+            temperature: 0.7,
+            topP: 0.9,
+            maxOutputTokens: 800,
+          }
+        });
+        console.log('✅ Google Gemini AI initialized successfully');
+        console.log('🤖 Model object:', !!this.model);
+      } catch (error) {
+        console.log('❌ Error initializing Gemini:', error.message);
+        this.genAI = null;
+        this.model = null;
+      }
     }
     
     this.setupMiddleware();
@@ -405,6 +419,7 @@ class AIMLAgent {
     const conversationHistory = this.conversationHistory.get(sessionId) || [];
     
     // Try Gemini first if available
+    console.log('🔍 Model available:', !!this.model);
     if (this.model) {
       try {
         console.log('🤖 Attempting Gemini response...');
@@ -444,7 +459,41 @@ class AIMLAgent {
     return fallbackResponse;
   }
 
+  // Rate limiting method
+  async waitForRateLimit() {
+    const now = Date.now();
+    const timeSinceLastCall = now - this.lastApiCall;
+    
+    if (timeSinceLastCall < this.minApiInterval) {
+      const waitTime = this.minApiInterval - timeSinceLastCall;
+      console.log(`⏳ Rate limiting: waiting ${waitTime}ms before next API call`);
+      await new Promise(resolve => setTimeout(resolve, waitTime));
+    }
+    
+    this.lastApiCall = Date.now();
+  }
+
+  // Exponential backoff retry method
+  async retryWithBackoff(fn, maxRetries = 3) {
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        return await fn();
+      } catch (error) {
+        if (error.message.includes('HTTP 429') && attempt < maxRetries) {
+          const backoffTime = Math.pow(2, attempt) * 5000; // More conservative exponential backoff (5s, 10s, 20s)
+          console.log(`🔄 Rate limit hit, retrying in ${backoffTime}ms (attempt ${attempt}/${maxRetries})`);
+          await new Promise(resolve => setTimeout(resolve, backoffTime));
+          continue;
+        }
+        throw error;
+      }
+    }
+  }
+
   async generateGeminiResponse(userMessage, intent, extractedInfo, conversationHistory) {
+    // Apply rate limiting
+    await this.waitForRateLimit();
+    
     const context = this.createComprehensiveContext();
     const conversationContext = conversationHistory.length > 0 
       ? `\n\nCONVERSATION HISTORY:\n${conversationHistory.map(msg => `${msg.role}: ${msg.content}`).join('\n')}`
@@ -557,30 +606,34 @@ RESPONSE:`;
     try {
       console.log('📤 Sending prompt to Gemini via REST API...');
       
-      // Use REST API directly
+      // Use REST API directly with retry logic
       const apiKey = process.env.GEMINI_API_KEY || 'AIzaSyBQmFySnKjg0GbjYHvUI6Pfpl-9e2GYYTY';
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          contents: [{
-            parts: [{
-              text: prompt
-            }]
-          }],
-          generationConfig: {
-            temperature: 0.7,
-            topP: 0.9,
-            maxOutputTokens: 800,
-          }
-        })
-      });
+      const response = await this.retryWithBackoff(async () => {
+        const apiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{
+                text: prompt
+              }]
+            }],
+            generationConfig: {
+              temperature: 0.7,
+              topP: 0.9,
+              maxOutputTokens: 800,
+            }
+          })
+        });
 
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
+        if (!apiResponse.ok) {
+          throw new Error(`HTTP ${apiResponse.status}: ${apiResponse.statusText}`);
+        }
+        
+        return apiResponse;
+      });
 
       const data = await response.json();
       
@@ -588,6 +641,9 @@ RESPONSE:`;
         const text = data.candidates[0].content.parts[0].text;
         
         console.log('📥 Received response from Gemini:', text.substring(0, 100) + '...');
+        
+        // Reset rate limit retries on successful call
+        this.rateLimitRetries = 0;
         
         // Parse the response to extract main answer and suggestions
         const parts = text.split('SUGGESTED FOLLOW-UP QUESTIONS:');
