@@ -1,0 +1,472 @@
+{
+  "years": {
+    "2024": {
+      "stats": {
+        "year": 2024,
+        "totalPlacements": 78,
+        "fullTimeOffers": 50,
+        "internshipsCount": 5,
+        "numCompanies": 33,
+        "tier1Offers": 42,
+        "tier2Offers": 39,
+        "multipleOffersCount": 1,
+        "ctc": { "highest": 19.6, "average": 11.27, "lowest": 3.93, "currency": "LPA" },
+        "offersByCompany": [
+          {"name":"BOSCH","value":13},
+          {"name":"ACCENTURE","value":11},
+          {"name":"CAP GEMMINI","value":5},
+          {"name":"BRILLIO","value":5},
+          {"name":"ORACLE INDIA Pvt Ltd.","value":5},
+          {"name":"COHESITY","value":5},
+          {"name":"QUANTIPHI","value":5},
+          {"name":"MINDTREE","value":3},
+          {"name":"KALEYRA","value":3},
+          {"name":"DELOITTE USA","value":3},
+          {"name":"AMEDEUS LABS","value":3},
+          {"name":"SIGNAL CHIP","value":3},
+          {"name":"EY GDS","value":2},
+          {"name":"TCS","value":2},
+          {"name":"DELOITTE IND","value":2},
+          {"name":"ATHENA HEALTH","value":2},
+          {"name":"SYMPHONY AI","value":2},
+          {"name":"ARYAKA NETWORKS","value":2},
+          {"name":"DXC TECHNOLOGY","value":1},
+          {"name":"NCR CORPORATION","value":1},
+          {"name":"SABRE TECH","value":1},
+          {"name":"CISCO INDIA","value":1},
+          {"name":"SANDVINE","value":1}
+        ]
+      },
+      "companies": [
+        {"name": "ACCENTURE", "tier": "Tier-1", "offers": 11},
+        {"name": "BOSCH", "tier": "Tier-1", "offers": 13},
+        {"name": "EY GDS", "tier": "Tier-1", "offers": 2},
+        {"name": "MINDTREE", "tier": "Tier-1", "offers": 3},
+        {"name": "DXC TECHNOLOGY", "tier": "Tier-1", "offers": 1},
+        {"name": "CAP GEMMINI", "tier": "Tier-1", "offers": 5},
+        {"name": "BRILLIO", "tier": "Tier-1", "offers": 5},
+        {"name": "TCS", "tier": "Tier-1", "offers": 2},
+        {"name": "ORACLE INDIA Pvt Ltd.", "tier": "Tier-2", "offers": 5},
+        {"name": "NCR CORPORATION", "tier": "Tier-2", "offers": 1},
+        {"name": "KALEYRA", "tier": "Tier-2", "offers": 3},
+        {"name": "COHESITY", "tier": "Tier-2", "offers": 5},
+        {"name": "DELOITTE IND", "tier": "Tier-2", "offers": 2},
+        {"name": "DELOITTE USA", "tier": "Tier-2", "offers": 3},
+        {"name": "AMEDEUS LABS", "tier": "Tier-2", "offers": 3},
+        {"name": "ATHENA HEALTH", "tier": "Tier-2", "offers": 2},
+        {"name": "SYMPHONY AI", "tier": "Tier-2", "offers": 2},
+        {"name": "SABRE TECH", "tier": "Tier-2", "offers": 1},
+        {"name": "ARYAKA NETWORKS", "tier": "Tier-2", "offers": 2},
+        {"name": "SIGNAL CHIP", "tier": "Tier-2", "offers": 3},
+        {"name": "QUANTIPHI", "tier": "Tier-2", "offers": 5},
+        {"name": "CISCO INDIA", "tier": "Tier-2", "offers": 1},
+        {"name": "SANDVINE", "tier": "Tier-2", "offers": 1}
+      ],
+      "tier1Placements": {
+        "sourceDocument": "placememt-T1.docx",
+        "title": "TIER-1 PLACEMENTS",
+        "companies": [
+          {"companyName": "ACCENTURE", "students": ["Drushya C K","Hruthwik K","Kushagra Galundia","Meghana Sharath","Maithri","Meghana Puttannayya Goudar","Rachana N","Supreeta Anand Byatnal","Pooja G Nair","Risha Irshad Khan","Sanjana Srinivas"]},
+          {"companyName": "BOSCH", "students": ["Abhiram Padyana","Amogha Hegde","Daksh Gupta","H Anarghya","Lalitashree Hegde","Naveen Kedilaya","P Lalasa","Roopa Maruti Shet","Sagar P","Sanjana V","Mithun S","Sushmitha J","Anusha A"]},
+          {"companyName": "EY GDS", "students": ["Hemanth Kumar R","Nischala Prasad"]},
+          {"companyName": "MINDTREE", "students": ["Anupriya Jain","Muskan Agarwal","Varshini Srinivasan"]},
+          {"companyName": "DXC TECHNOLOGY", "students": ["Niveditha M"]},
+          {"companyName": "CAP GEMMINI", "students": ["B S Prasanna","Karthik M","Pannaga Sharma M L","Abhiram Sridhar","Sheryl Rhea Varughese"]},
+          {"companyName": "BRILLIO", "students": ["Chamundi","Chinmayi S","Heena kousar B Makandar","Pradeepa R","Rakshith Ravindra Chatra"]},
+          {"companyName": "TCS", "students": ["Anannya Patra","Pushya D"]}
+        ]
+      },
+      "tier2Placements": {
+        "sourceDocument": "placememt-T2.docx",
+        "title": "TIER-2 PLACEMENTS",
+        "companies": [
+          {"companyName": "ORACLE INDIA Pvt Ltd.", "students": ["Harika Jayanthi","Muskan Agarwal","Urmika Kasi","Vikram K","K Anirudh Bharadwaj"]},
+          {"companyName": "NCR CORPORATION", "students": ["Abhilash G"]},
+          {"companyName": "KALEYRA", "students": ["Ankith B Rao","Pushya D","Roopa Maruti Shet"]},
+          {"companyName": "COHESITY", "students": ["Anupriya Jain","Likhit J Jain","Pravalikha C","Vedansh Sharma","Zain Ilyasi"]},
+          {"companyName": "DELOITTE IND", "students": ["Abhiram Padyana","Ajay Singh"]},
+          {"companyName": "DELOITTE USA", "students": ["Daksh Gupta","Nischala Prasad","Sushmitha J"]},
+          {"companyName": "AMEDEUS LABS", "students": ["Aishwarya E Patil","Pannaga Sharma M L","Yashas R"]},
+          {"companyName": "ATHENA HEALTH", "students": ["Anubhaw Choudhary","Rahul Bhaskar"]},
+          {"companyName": "SYMPHONY AI", "students": ["Anannya Patra","Hruthwik K"]},
+          {"companyName": "SABRE TECH", "students": ["Abhishek Sheth"]},
+          {"companyName": "ARYAKA NETWORKS", "students": ["Amogha Hegde","Ashritha BS"]},
+          {"companyName": "SIGNAL CHIP", "students": ["B S Prasanna","Sanjana V","Shreyas Prasad"]},
+          {"companyName": "QUANTIPHI", "students": ["Anirudh Bathija","Anjali Kulkarni","Chinmayi S","Vivek V","Nilansh Thakur"]},
+          {"companyName": "CISCO INDIA", "students": ["Dasari Dhanya Sri"]},
+          {"companyName": "SANDVINE", "students": ["Ashutosh G Shanbhogue"]}
+        ]
+      },
+      "placementDetails": {
+        "title": "PLACEMENT DETAILS 2024",
+        "department": "Department of Machine Learning",
+        "institution": "B.M.S. College of Engineering Bengaluru-560019",
+        "affiliation": "Autonomous Institute Affiliated to VTU",
+        "summaryStats": {"totalPlacements": "78", "fullTimeOffers": "50"},
+        "topRecruitingCompanies": [
+          {"companyName": "F5 cybersecurity", "offersMade": null},
+          {"companyName": "Deutche Bank", "offersMade": null},
+          {"companyName": "Lowe's India", "offersMade": null},
+          {"companyName": "HPE", "offersMade": "T"},
+          {"companyName": "Kickdrum", "offersMade": null},
+          {"companyName": "Netradyne", "offersMade": "2"},
+          {"companyName": "Dell", "offersMade": "Б"},
+          {"companyName": "Genpact", "offersMade": "4"},
+          {"companyName": "Delloite", "offersMade": "2"},
+          {"companyName": "Winwire", "offersMade": "1"}
+        ],
+        "studentPlacements": [
+          {"usn": "1BM20A1001", "fullName": "ABHISHEK S KERENOR", "details": "Mu Sigma(5 CTC)"},
+          {"usn": "1BM20A1002", "fullName": "ACHALA VARSHA V P", "details": "AT&T(Internship @45,000)"},
+          {"usn": "1BM20A1003", "fullName": "ADVAITH V", "details": "Cisco(Internship @98,000)"},
+          {"usn": "IBM20A1004", "fullName": "AISHWARYA", "details": "Lowe's India(18.6 CTC)"},
+          {"usn": "1BM20A1005", "fullName": "AKARSH THEJASVI RAJU M", "details": "Lumen(Internship @30,000)"},
+          {"usn": "1BM20A1006", "fullName": "AKASH V", "details": "Fidelity (12 CTC)"},
+          {"usn": "IBM20A1007", "fullName": "AKSHATHAA Y", "details": "MPower(Internship @40,000)"},
+          {"usn": "IBM20A1009", "fullName": "AMARTHYA KASIMAHANTHI", "details": "Innover(Tier 1, 6 CTC), Quantiphi(Tier 2, 8.5 CTC)"},
+          {"usn": "1BM20A1010", "fullName": "ANAGHA PRASANNA KRISHNA", "details": "SkillWinner (Internship @25,000)"},
+          {"usn": "1BM20A1011", "fullName": "ANUSHKA SHIVKUMAR", "details": "HPE(17.5 CTC)"}
+          
+          
+          
+        ],
+        "offCampusInternships": {
+          "title": "Off Campus Internship Details (2023-24)",
+          "internships": [
+            {"siNo": "1", "name": "Bhanu Kiran T", "usn": "1BM21A1400", "duration": "3 months", "companyName": "Velozity Global Solutions", "stipend": "7000"},
+            {"siNo": "2", "name": "Yashpreet Voladoddi", "usn": "IBM20A1063", "duration": "3 months", "companyName": "CAIR, DRDO", "stipend": "Unpaid"}
+          ]
+        }
+      }
+    },
+    "2025": {
+      "stats": {
+        "year": 2025,
+        "totalPlacements": 52,
+        "fullTimeOffers": 75,
+        "internshipsCount": 17,
+        "numCompanies": 51,
+        "tier1Offers": null,
+        "tier2Offers": null,
+        "multipleOffersCount": 35,
+        "ctc": { "highest": 50, "average": 9.94, "lowest": 3.3, "currency": "LPA" },
+        "offersByCompany": [
+          {"name":"Global Logic","value":17},
+          {"name":"TCS (Ninja)","value":8},
+          {"name":"Oracle","value":5},
+          {"name":"TCS (Digital)","value":5},
+          {"name":"Siemens","value":4},
+          {"name":"MathCo","value":4},
+          {"name":"RamSoft","value":4},
+          {"name":"Accenture","value":3},
+          {"name":"IBM","value":3},
+          {"name":"Commonwealth Bank of Australia","value":3},
+          {"name":"Impact Analytics","value":3},
+          {"name":"Deloitte India","value":2},
+          {"name":"Sahaj","value":2},
+          {"name":"Dassault Systèmes","value":2},
+          {"name":"Deutsche Bank","value":2},
+          {"name":"Fidelity","value":2},
+          {"name":"HPE CTY","value":2},
+          {"name":"ZeeOmega","value":2},
+          {"name":"NatWest","value":2},
+          {"name":"Tiger Analytics","value":2},
+          {"name":"Boomi Software","value":2},
+          {"name":"Broadridge","value":2},
+          {"name":"Dell","value":1},
+          {"name":"Cloudera","value":1},
+          {"name":"Ittiam","value":1},
+          {"name":"Confluent","value":1},
+          {"name":"Doclens","value":1},
+          {"name":"Cargill","value":1},
+          {"name":"Numocity","value":1},
+          {"name":"Quantiphi Analytics","value":1},
+          {"name":"HPE","value":1},
+          {"name":"Iron Mountain","value":1},
+          {"name":"Worldline","value":1},
+          {"name":"Leadsquared","value":1},
+          {"name":"Primenumbers Technologies","value":1},
+          {"name":"AT&T","value":1},
+          {"name":"Amagi","value":1},
+          {"name":"Lucious","value":1},
+          {"name":"Target","value":1},
+          {"name":"TCS (Prime)","value":1},
+          {"name":"Nokia","value":1},
+          {"name":"McAfee","value":1},
+          {"name":"Cohesity","value":1},
+          {"name":"Nutanix","value":1},
+          {"name":"Infosys","value":1},
+          {"name":"Moxo","value":1},
+          {"name":"Mu Sigma","value":1},
+          {"name":"Bosch","value":1},
+          {"name":"Capgemini","value":1},
+          {"name":"LTIMindTree","value":1},
+          {"name":"Candescent","value":1}
+        ]
+      },
+      "companies": [
+        {"name":"Global Logic","offers":17},
+        {"name":"TCS (Ninja)","offers":8},
+        {"name":"Oracle","offers":5},
+        {"name":"TCS (Digital)","offers":5},
+        {"name":"Siemens","offers":4},
+        {"name":"MathCo","offers":4},
+        {"name":"RamSoft","offers":4}
+      ],
+      "title": "PLACEMENT DETAILS 2025",
+      "department": "Department of Machine Learning",
+      "institution": "B.M.S. College of Engineering Bengaluru-560019",
+      "affiliation": "Autonomous Institute Affiliated to VTU",
+      "students": [
+        {"usn": "1BM21AI001", "name": "A J V Madhu Mohan", "offers": [
+          {"company": "Global Logic", "offerType": "FT", "jobRole": "Trainee Software Engineer", "ctcLpa": 5.66},
+          {"company": "Oracle", "offerType": "IT", "jobRole": "Project Intern – Oracle (CSS)", "stipendPerMonth": 50000},
+          {"company": "Accenture", "offerType": "FT", "jobRole": "Associate Analyst", "ctcLpa": 5}
+        ]},
+        {"usn": "1BM21AI002", "name": "A J V Manumohan", "offers": [
+          {"company": "Global Logic", "offerType": "FT", "jobRole": "Trainee Software Engineer", "ctcLpa": 5.66},
+          {"company": "Deloitte India", "offerType": "IT+FT", "jobRole": "ADMM Analyst", "ctcLpa": 7.6},
+          {"company": "TCS (Digital)", "offerType": "FT", "jobRole": "Assistant Engineer Trainee", "ctcLpa": 7}
+        ]},
+        {"usn": "1BM21AI004", "name": "Abdul Amaan", "offers": [
+          {"company": "Sahaj", "offerType": "SI", "jobRole": "Machine Learning Intern", "stipendPerMonth": 15000},
+          {"company": "IBM", "offerType": "IT+FT", "jobRole": "Software Developer", "ctcLpa": 12},
+          {"company": "TCS (Digital)", "offerType": "FT", "jobRole": "Assistant Engineer Trainee", "ctcLpa": 7}
+        ]},
+        {"usn": "1BM21AI005", "name": "Abhilash Mohan Das", "offers": [
+          {"company": "TCS (Ninja)", "offerType": "FT", "jobRole": "Assistant Engineer Trainee", "ctcLpa": 3.3},
+          {"company": "Accenture", "offerType": "FT", "jobRole": "Associate Analyst", "ctcLpa": 5},
+          {"company": "Oracle", "offerType": "FT", "jobRole": "Associate Consultant", "ctcLpa": 9.34}
+        ]},
+        {"usn": "1BM21AI008", "name": "Adithya G Jayanth", "offers": [
+          {"company": "Dell", "offerType": "SI", "jobRole": "Business Analyst", "stipendPerMonth": 35000},
+          {"company": "Cloudera", "offerType": "IT+FT", "jobRole": "Software Engineer", "ctcLpa": 23.97}
+        ]},
+        {"usn": "1BM21AI013", "name": "Amal Srivastava", "offers": [
+          {"company": "Oracle", "offerType": "IT", "jobRole": "Project Intern – Oracle (CSS)", "stipendPerMonth": 50000},
+          {"company": "TCS (Digital)", "offerType": "FT", "jobRole": "Assistant Engineer Trainee", "ctcLpa": 7}
+        ]},
+        {"usn": "1BM21AI015", "name": "Amit", "offers": [
+          {"company": "Global Logic", "offerType": "FT", "jobRole": "Trainee Software Engineer", "ctcLpa": 5.66},
+          {"company": "Dassault Systèmes", "offerType": "IT+PBC", "jobRole": "Software Engineering Associate", "ctcLpa": 10}
+        ]},
+        {"usn": "1BM21AI018", "name": "Ananya Sharma", "offers": [
+          {"company": "Siemens", "offerType": "SI", "jobRole": "Technical Intern", "stipendLumpsum": 1.05},
+          {"company": "Ittiam", "offerType": "IT+FT", "jobRole": "Software Engineer", "ctcLpa": 16}
+        ]},
+        {"usn": "1BM21AI021", "name": "Ankith L", "offers": [
+          {"company": "Sahaj", "offerType": "SI", "jobRole": "Machine Learning Intern", "stipendPerMonth": 15000},
+          {"company": "Confluent", "offerType": "IT+PBC", "jobRole": "Software Engineer", "ctcLpa": 50}
+        ]},
+        {"usn": "1BM21AI024", "name": "Anushka Rajgiri", "offers": [
+          {"company": "Deutsche Bank", "offerType": "FT", "jobRole": "Graduate Analyst", "ctcLpa": 20.2},
+          {"company": "Doclens", "offerType": "IT", "jobRole": "Software Engineering Intern", "stipendPerMonth": 40000}
+        ]},
+        {"usn": "1BM21AI026", "name": "Archit Subudhi", "offers": [
+          {"company": "Deloitte India", "offerType": "IT+FT", "jobRole": "AI & Data Science Engineer", "ctcLpa": 7.6},
+          {"company": "TCS (Ninja)", "offerType": "FT", "jobRole": "Assistant Engineer Trainee", "ctcLpa": 3.3}
+        ]},
+        {"usn": "1BM21AI027", "name": "Aryaman Sharma", "offers": [
+          {"company": "Fidelity", "offerType": "SI", "jobRole": "Data Engineer", "stipendPerMonth": 35000},
+          {"company": "Cargill", "offerType": "IT+FT", "jobRole": "Software Engineering Intern", "ctcLpa": 13}
+        ]},
+        {"usn": "1BM21AI028", "name": "Ayush Kumar Dubey", "offers": [
+          {"company": "MathCo", "offerType": "FT", "jobRole": "Trainee Analyst", "ctcLpa": 5.5},
+          {"company": "IBM", "offerType": "IT+FT", "jobRole": "Software Developer", "ctcLpa": 12},
+          {"company": "TCS (Ninja)", "offerType": "FT", "jobRole": "Assistant Engineer Trainee", "ctcLpa": 3.3}
+        ]},
+        {"usn": "1BM21AI031", "name": "Bhavesh S", "offers": [
+          {"company": "Global Logic", "offerType": "FT", "jobRole": "Trainee Software Engineer", "ctcLpa": 5.66},
+          {"company": "Oracle", "offerType": "IT+FT", "jobRole": "Cloud Analyst", "ctcLpa": 9.35}
+        ]},
+        {"usn": "1BM21AI033", "name": "Bhuvana Y", "offers": [
+          {"company": "Numocity", "offerType": "IT+FT", "jobRole": "Software Engineer", "ctcLpa": 7.25},
+          {"company": "TCS (Digital)", "offerType": "FT", "jobRole": "Assistant Engineer Trainee", "ctcLpa": 7}
+        ]},
+        {"usn": "1BM21AI036", "name": "Chetna Mundra", "offers": [
+          {"company": "Deutsche Bank", "offerType": "FT", "jobRole": "Graduate Analyst", "ctcLpa": 20.2}
+        ]},
+        {"usn": "1BM21AI037", "name": "Deeksha Jayanth", "offers": [
+          {"company": "HPE CTY", "offerType": "SI+IT+FT", "jobRole": "Software Developer", "ctcLpa": 17.5}
+        ]},
+        {"usn": "1BM21AI038", "name": "Deeksha Manjunath Bychapur", "offers": [
+          {"company": "Oracle", "offerType": "FT", "jobRole": "Associate Application Developer", "ctcLpa": 19.18}
+        ]},
+        {"usn": "1BM21AI039", "name": "Dhanush S", "offers": [
+          {"company": "RamSoft", "offerType": "IT+PBC", "jobRole": "AI Intern", "ctcLpa": 10.7}
+        ]},
+        {"usn": "1BM21AI041", "name": "Divya Mishra", "offers": [
+          {"company": "Commonwealth Bank of Australia", "offerType": "FT", "jobRole": "Graduate Software Engineer", "ctcLpa": 12.35},
+          {"company": "TCS (Ninja)", "offerType": "FT", "jobRole": "Assistant Engineer Trainee", "ctcLpa": 3.3}
+        ]},
+        {"usn": "1BM21AI042", "name": "Dyuthi B V", "offers": [
+          {"company": "HPE CTY", "offerType": "SI+IT+FT", "jobRole": "Software Designer", "ctcLpa": 17.5}
+        ]},
+        {"usn": "1BM21AI051", "name": "Harshith", "offers": [
+          {"company": "Quantiphi Analytics", "offerType": "IT+PBC", "jobRole": "Business Analytics Sales Engineer", "ctcLpa": 8.5}
+        ]},
+        {"usn": "1BM21AI052", "name": "Hemanth Raghu", "offers": [
+          {"company": "RamSoft", "offerType": "IT+PBC", "jobRole": "AI Intern", "ctcLpa": 10.7}
+        ]},
+        {"usn": "1BM21AI053", "name": "Ilaa S Chenjeri", "offers": [
+          {"company": "HPE", "offerType": "IT", "jobRole": "Software Developer", "stipendPerMonth": 40000}
+        ]},
+        {"usn": "1BM21AI055", "name": "K Kalyankumar", "offers": [
+          {"company": "Global Logic", "offerType": "FT", "jobRole": "Trainee Software Engineer", "ctcLpa": 5.66},
+          {"company": "Impact Analytics", "offerType": "IT+FT", "jobRole": "Business Analyst", "ctcLpa": 13}
+        ]},
+        {"usn": "1BM21AI058", "name": "L Pankaj Venkat", "offers": [
+          {"company": "Global Logic", "offerType": "FT", "jobRole": "Trainee Software Engineer", "ctcLpa": 5.66}
+        ]},
+        {"usn": "1BM21AI060", "name": "Lohitha T", "offers": [
+          {"company": "ZeeOmega", "offerType": "IT+PBC", "jobRole": "Software Developer Intern", "ctcLpa": 8}
+        ]},
+        {"usn": "1BM21AI061", "name": "M R Rohith", "offers": [
+          {"company": "RamSoft", "offerType": "IT+PBC", "jobRole": "AI Intern", "ctcLpa": 10.7}
+        ]},
+        {"usn": "1BM21AI062", "name": "M Shrawan Matrubai", "offers": [
+          {"company": "Iron Mountain", "offerType": "IT+FT", "jobRole": "Associate Software Engineer", "ctcLpa": 9.7}
+        ]},
+        {"usn": "1BM21AI066", "name": "Medha Hegde", "offers": [
+          {"company": "Global Logic", "offerType": "FT", "jobRole": "Trainee Software Engineer", "ctcLpa": 5.66},
+          {"company": "NatWest", "offerType": "FT", "jobRole": "Software Engineer", "ctcLpa": 13}
+        ]},
+        {"usn": "1BM21AI067", "name": "Monish Anand", "offers": [
+          {"company": "Worldline", "offerType": "IT+FT", "jobRole": "Software Engineer (PayTech Engineer)", "ctcLpa": 10.5}
+        ]},
+        {"usn": "1BM21AI069", "name": "Muppidi Theertha Rama Sathwik", "offers": [
+          {"company": "Tiger Analytics", "offerType": "FT", "jobRole": "Software Engineer", "ctcLpa": 7.5}
+        ]},
+        {"usn": "1BM21AI071", "name": "Navitha Abhinaya S", "offers": [
+          {"company": "Accenture", "offerType": "FT", "jobRole": "Analytics Associate", "ctcLpa": 5}
+        ]},
+        {"usn": "1BM21AI072", "name": "Nayana J", "offers": [
+          {"company": "Leadsquared", "offerType": "IT+FT", "jobRole": "Software Developer", "ctcLpa": 12},
+          {"company": "TCS (Digital)", "offerType": "FT", "jobRole": "Assistant Engineer Trainee", "ctcLpa": 7}
+        ]},
+        {"usn": "1BM21AI073", "name": "Neha H", "offers": [
+          {"company": "Siemens", "offerType": "SI", "jobRole": "Technical Intern", "stipendLumpsum": 1.05},
+          {"company": "Impact Analytics", "offerType": "IT+FT", "jobRole": "Business Analyst", "ctcLpa": 13}
+        ]},
+        {"usn": "1BM21AI074", "name": "Nihal Gopal Jee Thakur", "offers": [
+          {"company": "Boomi Software", "offerType": "IT+PBC", "jobRole": "Software Intern", "ctcLpa": 12}
+        ]},
+        {"usn": "1BM21AI075", "name": "Nikhith Ramesh Waddodagi", "offers": [
+          {"company": "TCS (Ninja)", "offerType": "FT", "jobRole": "Assistant Engineer Trainee", "ctcLpa": 3.3}
+        ]},
+        {"usn": "1BM21AI085", "name": "Patil Vishnudatt", "offers": [
+          {"company": "Global Logic", "offerType": "FT", "jobRole": "Trainee Software Engineer", "ctcLpa": 5.66},
+          {"company": "RamSoft", "offerType": "IT+PBC", "jobRole": "AI Intern", "ctcLpa": 10.7}
+        ]},
+        {"usn": "1BM21AI086", "name": "Prahladh N C", "offers": [
+          {"company": "Siemens", "offerType": "SI", "jobRole": "Technical Intern", "stipendLumpsum": 1.05},
+          {"company": "Primenumbers Technologies", "offerType": "IT+PBC", "jobRole": "Software Development", "ctcLpa": 15}
+        ]},
+        {"usn": "1BM21AI088", "name": "Prakrity Gupta", "offers": [
+          {"company": "Global Logic", "offerType": "FT", "jobRole": "Trainee Software Engineer", "ctcLpa": 5.66},
+          {"company": "NatWest", "offerType": "FT", "jobRole": "Software Engineer", "ctcLpa": 13}
+        ]},
+        {"usn": "1BM21AI089", "name": "Pranav R Tompe", "offers": [
+          {"company": "Global Logic", "offerType": "FT", "jobRole": "Trainee Software Engineer", "ctcLpa": 5.66},
+          {"company": "AT&T", "offerType": "IT+PBC", "jobRole": "Intern", "ctcLpa": 16}
+        ]},
+        {"usn": "1BM21AI090", "name": "Pranoti Prabhakar Patil", "offers": [
+          {"company": "Global Logic", "offerType": "FT", "jobRole": "Software Developer", "ctcLpa": 5.66},
+          {"company": "Amagi", "offerType": "IT+FT", "jobRole": "Software Developer", "ctcLpa": 18.5}
+        ]},
+        {"usn": "1BM21AI091", "name": "Pranshu Arora", "offers": [
+          {"company": "Global Logic", "offerType": "IT+PBC", "jobRole": "Backend Engineer Technology", "ctcLpa": 16},
+          {"company": "Lucious", "offerType": "IT+FT", "jobRole": "Software Engineering and Developer", "ctcLpa": 16}
+        ]},
+        {"usn": "1BM21AI092", "name": "Pratham G Rao", "offers": [
+          {"company": "Global Logic", "offerType": "FT", "jobRole": "Trainee Software Engineer", "ctcLpa": 5.66},
+          {"company": "Target", "offerType": "IT+PBC", "jobRole": "Software Engineer", "ctcLpa": 12.5},
+          {"company": "TCS (Ninja)", "offerType": "FT", "jobRole": "Assistant Engineer Trainee", "ctcLpa": 3.3}
+        ]},
+        {"usn": "1BM21AI094", "name": "Priya M G", "offers": [
+          {"company": "Broadridge", "offerType": "IT+FT", "jobRole": "Member Technical", "ctcLpa": 15},
+          {"company": "TCS (Ninja)", "offerType": "FT", "jobRole": "Assistant Engineer Trainee", "ctcLpa": 3.3}
+        ]},
+        {"usn": "1BM21AI095", "name": "Priyanka S", "offers": [
+          {"company": "MathCo", "offerType": "FT", "jobRole": "Trainee Analyst", "ctcLpa": 5.5},
+          {"company": "Commonwealth Bank of Australia", "offerType": "FT", "jobRole": "Graduate Software Engineer", "ctcLpa": 12.35}
+        ]},
+        {"usn": "1BM21AI099", "name": "Rahul Satish Vadhyar", "offers": [
+          {"company": "IBM", "offerType": "IT+FT", "jobRole": "Software Developer", "ctcLpa": 12},
+          {"company": "TCS (Prime)", "offerType": "FT", "jobRole": "Assistant Engineer Trainee", "ctcLpa": 9}
+        ]},
+        {"usn": "1BM21AI101", "name": "Ranjith V", "offers": [
+          {"company": "Global Logic", "offerType": "FT", "jobRole": "Trainee Software Engineer", "ctcLpa": 5.66},
+          {"company": "Commonwealth Bank of Australia", "offerType": "FT", "jobRole": "Graduate Software Engineer", "ctcLpa": 12.35}
+        ]},
+        {"usn": "1BM21AI106", "name": "Ruchika Venkat", "offers": [
+          {"company": "Nokia", "offerType": "IT", "jobRole": "Intern", "stipendPerMonth": 25000}
+        ]},
+        {"usn": "1BM21AI107", "name": "Ryan Gupta", "offers": [
+          {"company": "McAfee", "offerType": "IT+PBC", "jobRole": "Software Development Engineer", "ctcLpa": 14.65}
+        ]},
+        {"usn": "1BM21AI109", "name": "Sahana Yuvraj Harati", "offers": [
+          {"company": "Impact Analytics", "offerType": "IT+FT", "jobRole": "Business Analyst", "ctcLpa": 13}
+        ]},
+        {"usn": "1BM21AI110", "name": "Sai Varun P", "offers": [
+          {"company": "Dassault Systèmes", "offerType": "IT+PBC", "jobRole": "Software Engineering Associate", "ctcLpa": 10}
+        ]},
+        {"usn": "1BM21AI112", "name": "Samarth R Joshi", "offers": [
+          {"company": "ZeeOmega", "offerType": "IT+PBC", "jobRole": "Software Developer", "ctcLpa": 8}
+        ]},
+        {"usn": "1BM21AI114", "name": "Samprith S", "offers": [
+          {"company": "Global Logic", "offerType": "FT", "jobRole": "Trainee Software Engineer", "ctcLpa": 5.66}
+        ]},
+        {"usn": "1BM21AI116", "name": "Sharanya M", "offers": [
+          {"company": "MathCo", "offerType": "FT", "jobRole": "Trainee Analyst", "ctcLpa": 5.5}
+        ]},
+        {"usn": "1BM21AI117", "name": "Shivanshi Singh", "offers": [
+          {"company": "Siemens", "offerType": "SI", "jobRole": "Technical Intern", "stipendLumpsum": 1.05},
+          {"company": "Cohesity", "offerType": "FT", "jobRole": "Site Reliability Engineer", "ctcLpa": 13.75}
+        ]},
+        {"usn": "1BM21AI118", "name": "Shreevatsa Kashyap B N", "offers": [
+          {"company": "MathCo", "offerType": "FT", "jobRole": "Trainee Analyst", "ctcLpa": 5.5},
+          {"company": "Boomi Software", "offerType": "IT+PBC", "jobRole": "Software Intern", "ctcLpa": 12}
+        ]},
+        {"usn": "1BM21AI119", "name": "Shreya Shastry", "offers": [
+          {"company": "Fidelity", "offerType": "SI+IT+PBC", "jobRole": "Full Stack Engineer", "ctcLpa": 12}
+        ]},
+        {"usn": "1BM21AI121", "name": "Shreyas Singh Thakur", "offers": [
+          {"company": "Nutanix", "offerType": "IT+PBC", "jobRole": "Remote Resident Expert (RRE)", "ctcLpa": 11.9}
+        ]},
+        {"usn": "1BM21AI127", "name": "Sumaiya M S", "offers": [
+          {"company": "Infosys", "offerType": "FT", "jobRole": "Specialist Programmer", "ctcLpa": 9.5}
+        ]},
+        {"usn": "1BM21AI137", "name": "Yedu Vamshi Y", "offers": [
+          {"company": "Moxo", "offerType": "IT+PBC", "jobRole": "Solutions Associate", "ctcLpa": 10}
+        ]},
+        {"usn": "1BM21AI140", "name": "S Sarvesh", "offers": [
+          {"company": "Broadridge", "offerType": "IT+FT", "jobRole": "Member Technical", "ctcLpa": 15},
+          {"company": "Mu Sigma", "offerType": "FT", "jobRole": "Trainee Decision Scientist", "ctcLpa": 5}
+        ]},
+        {"usn": "1BM21AI141", "name": "Sankalp Gupta", "offers": [
+          {"company": "Global Logic", "offerType": "FT", "jobRole": "Trainee Software Engineer", "ctcLpa": 5.66}
+        ]},
+        {"usn": "1BM21AI142", "name": "Chandrika C", "offers": [
+          {"company": "Bosch", "offerType": "IT", "jobRole": "Student Trainee", "stipendPerMonth": 25000}
+        ]},
+        {"usn": "1BM22AI400", "name": "Chaithra A", "offers": [
+          {"company": "Capgemini", "offerType": "FT", "jobRole": "Analyst", "ctcLpa": 4}
+        ]},
+        {"usn": "1BM22AI401", "name": "Chetan S Yamakanamardi", "offers": [
+          {"company": "Tiger Analytics", "offerType": "FT", "jobRole": "Software Engineer", "ctcLpa": 7.5}
+        ]},
+        {"usn": "1BM22AI403", "name": "Nanditha M", "offers": [
+          {"company": "LTIMindTree", "offerType": "FT", "jobRole": "Graduate Engineer Trainee", "ctcLpa": 4},
+          {"company": "Candescent", "offerType": "IT+PBC", "jobRole": "SDE Intern", "ctcLpa": 12}
+        ]},
+        {"usn": "1BM22AI404", "name": "Naveen M Kamagoud", "offers": [
+          {"company": "Global Logic", "offerType": "FT", "jobRole": "Trainee Software Engineer", "ctcLpa": 5.66}
+        ]},
+        {"usn": "1BM22AI408", "name": "Rashi S", "offers": [
+          {"company": "TCS (Ninja)", "offerType": "FT", "jobRole": "Assistant Engineer Trainee", "ctcLpa": 3.3}
+        ]}
+      ]
+    }
+  }
+}

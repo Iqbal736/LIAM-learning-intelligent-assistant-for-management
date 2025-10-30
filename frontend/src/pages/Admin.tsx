@@ -27,7 +27,7 @@ interface AdminData {
 const Admin: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
-  const [activeTab, setActiveTab] = useState<'faculty' | 'courses' | 'infrastructure' | 'labs' | 'research'>('faculty');
+  const [activeTab, setActiveTab] = useState<'faculty' | 'courses' | 'infrastructure' | 'labs' | 'research' | 'placements'>('faculty');
   const [data, setData] = useState<AdminData>({
     faculty: [],
     courses: [],
@@ -37,6 +37,11 @@ const Admin: React.FC = () => {
   });
   const [editingItem, setEditingItem] = useState<any>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [placementsJson, setPlacementsJson] = useState<string>('');
+  const [placementsObj, setPlacementsObj] = useState<any>(null);
+  const [placementsError, setPlacementsError] = useState<string>('');
+  const [placementsYear, setPlacementsYear] = useState<'2025' | '2024'>('2025');
+  const [editingStudent, setEditingStudent] = useState<any>(null);
 
   // Load data on component mount
   useEffect(() => {
@@ -47,15 +52,17 @@ const Admin: React.FC = () => {
 
   const loadData = async () => {
     try {
-      const [facultyRes, coursesRes, infrastructureRes] = await Promise.all([
+      const [facultyRes, coursesRes, infrastructureRes, placementsRes] = await Promise.all([
         fetch('/api/faculty'),
         fetch('/api/courses'),
-        fetch('/api/infrastructure')
+        fetch('/api/infrastructure'),
+        fetch('/api/placements')
       ]);
 
       const facultyData = await facultyRes.json();
       const coursesData = await coursesRes.json();
       const infrastructureData = await infrastructureRes.json();
+      const placementsData = await placementsRes.json();
 
       const infraData = infrastructureData.data?.[0] || {};
       setData({
@@ -65,6 +72,9 @@ const Admin: React.FC = () => {
         labs: infraData.labs || [],
         researchFacilities: infraData.researchFacilities || []
       });
+      const po = placementsData.data || {};
+      setPlacementsJson(JSON.stringify(po, null, 2));
+      setPlacementsObj(po);
     } catch (error) {
       console.error('Error loading data:', error);
     }
@@ -140,6 +150,83 @@ const Admin: React.FC = () => {
       console.error('Error saving data:', error);
       alert('Failed to save data. Please try again.');
     }
+  };
+
+  const handleSavePlacements = async () => {
+    try {
+      setPlacementsError('');
+      const parsed = placementsObj ?? JSON.parse(placementsJson);
+      const res = await fetch('/api/placements', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(parsed)
+      });
+      if (!res.ok) throw new Error('Failed to save placements');
+      alert('Placements saved successfully');
+    } catch (e: any) {
+      setPlacementsError(e.message || 'Invalid JSON');
+    }
+  };
+
+  const yearData = placementsObj?.years?.[placementsYear] || {};
+  const students = Array.isArray(yearData.students) ? yearData.students : [];
+
+  const addStudent = () => {
+    const newStudent = { usn: '', name: '', offers: [] };
+    const next = { ...placementsObj };
+    next.years[placementsYear].students = [...students, newStudent];
+    setPlacementsObj(next);
+    setEditingStudent({ student: newStudent, index: students.length });
+    setIsEditing(true);
+  };
+
+  const removeStudent = (idx: number) => {
+    if (!window.confirm('Remove this student?')) return;
+    const next = { ...placementsObj };
+    next.years[placementsYear].students = students.filter((_: any, i: number) => i !== idx);
+    setPlacementsObj(next);
+  };
+
+  const openEditStudent = (idx: number) => {
+    setEditingStudent({ student: { ...students[idx] }, index: idx });
+    setIsEditing(true);
+  };
+
+  const updateEditingStudentField = (field: string, value: any) => {
+    setEditingStudent((prev: any) => ({ ...prev, student: { ...prev.student, [field]: value } }));
+  };
+
+  const addOffer = () => {
+    setEditingStudent((prev: any) => ({
+      ...prev,
+      student: { ...prev.student, offers: [...(prev.student.offers || []), { company: '', offerType: 'FT', jobRole: '', ctcLpa: '', stipendPerMonth: '' }] }
+    }));
+  };
+
+  const updateOffer = (oIdx: number, field: string, value: any) => {
+    setEditingStudent((prev: any) => {
+      const offers = [...(prev.student.offers || [])];
+      offers[oIdx] = { ...offers[oIdx], [field]: value };
+      return { ...prev, student: { ...prev.student, offers } };
+    });
+  };
+
+  const removeOffer = (oIdx: number) => {
+    setEditingStudent((prev: any) => {
+      const offers = (prev.student.offers || []).filter((_: any, i: number) => i !== oIdx);
+      return { ...prev, student: { ...prev.student, offers } };
+    });
+  };
+
+  const saveStudentEdits = () => {
+    const idx = editingStudent.index;
+    const next = { ...placementsObj };
+    const arr = [...(next.years[placementsYear].students || [])];
+    arr[idx] = editingStudent.student;
+    next.years[placementsYear].students = arr;
+    setPlacementsObj(next);
+    setIsEditing(false);
+    setEditingStudent(null);
   };
 
   const handleDelete = async (id: string, type: string) => {
@@ -440,7 +527,8 @@ const Admin: React.FC = () => {
                 { id: 'faculty', label: 'Faculty', icon: Users },
                 { id: 'courses', label: 'Courses', icon: BookOpen },
                 { id: 'labs', label: 'Labs', icon: Building2 },
-                { id: 'research', label: 'Research Facilities', icon: Building2 }
+                { id: 'research', label: 'Research Facilities', icon: Building2 },
+                { id: 'placements', label: 'Placements', icon: Building2 }
               ].map((tab) => {
                 const Icon = tab.icon;
                 return (
@@ -463,6 +551,7 @@ const Admin: React.FC = () => {
 
           {/* Tab Content */}
           <div className="p-6">
+            {activeTab !== 'placements' && (
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-semibold text-gray-900 capitalize">
                 Manage {activeTab}
@@ -475,8 +564,10 @@ const Admin: React.FC = () => {
                 <span>Add New</span>
               </button>
             </div>
+            )}
 
             {/* Data Table */}
+            {activeTab !== 'placements' ? (
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
@@ -545,12 +636,62 @@ const Admin: React.FC = () => {
                 </tbody>
               </table>
             </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-gray-600">Year:</span>
+                    <select value={placementsYear} onChange={e => setPlacementsYear(e.target.value as any)} className="px-3 py-2 rounded-lg border border-gray-300 text-sm">
+                      <option value="2025">2025</option>
+                      <option value="2024">2024</option>
+                    </select>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button onClick={addStudent} className="flex items-center space-x-2 bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200">
+                      <Plus className="w-4 h-4" />
+                      <span>Add Student</span>
+                    </button>
+                    <button onClick={handleSavePlacements} className="flex items-center space-x-2 bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200">
+                      <Save className="w-4 h-4" />
+                      <span>Save Placements</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="overflow-auto border border-gray-200 rounded-lg">
+                  <table className="min-w-full text-sm">
+                    <thead className="bg-gray-50">
+                      <tr className="text-left text-gray-600">
+                        <th className="py-2 px-3">USN</th>
+                        <th className="py-2 px-3">Name</th>
+                        <th className="py-2 px-3">Offers</th>
+                        <th className="py-2 px-3 text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {students.map((s: any, idx: number) => (
+                        <tr key={`${s.usn}-${idx}`} className="border-t">
+                          <td className="py-2 px-3">{s.usn || '—'}</td>
+                          <td className="py-2 px-3">{s.name || '—'}</td>
+                          <td className="py-2 px-3">{Array.isArray(s.offers) ? s.offers.map((o: any) => o.company).join(', ') : '—'}</td>
+                          <td className="py-2 px-3 text-right space-x-2">
+                            <button onClick={() => openEditStudent(idx)} className="text-blue-600 hover:text-blue-800"><Edit className="w-4 h-4 inline" /></button>
+                            <button onClick={() => removeStudent(idx)} className="text-red-600 hover:text-red-800"><Trash2 className="w-4 h-4 inline" /></button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                {placementsError && <div className="text-sm text-red-600">{placementsError}</div>}
+              </div>
+            )}
           </div>
         </div>
       </div>
 
       {/* Edit Modal */}
-      {isEditing && editingItem && (
+      {isEditing && activeTab !== 'placements' && editingItem && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -837,6 +978,79 @@ const Admin: React.FC = () => {
                 <Save className="w-4 h-4" />
                 <span>Save Changes</span>
               </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {isEditing && activeTab === 'placements' && editingStudent && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-3xl mx-4 max-h-[90vh] overflow-y-auto"
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-semibold text-gray-900">Edit Student ( {placementsYear} )</h3>
+              <button onClick={() => { setIsEditing(false); setEditingStudent(null); }} className="text-gray-400 hover:text-gray-600"><X className="w-6 h-6" /></button>
+            </div>
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">USN</label>
+                  <input value={editingStudent.student.usn || ''} onChange={e => updateEditingStudentField('usn', e.target.value)} className="w-full border border-gray-300 rounded-lg px-3 py-2" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                  <input value={editingStudent.student.name || ''} onChange={e => updateEditingStudentField('name', e.target.value)} className="w-full border border-gray-300 rounded-lg px-3 py-2" />
+                </div>
+              </div>
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="font-semibold text-gray-900">Offers</h4>
+                  <button onClick={addOffer} className="text-sm px-3 py-1.5 rounded-lg bg-blue-600 text-white">Add Offer</button>
+                </div>
+                <div className="space-y-3">
+                  {(editingStudent.student.offers || []).map((o: any, i: number) => (
+                    <div key={i} className="grid grid-cols-6 gap-2 items-end border border-gray-200 rounded-lg p-3">
+                      <div className="col-span-2">
+                        <label className="block text-xs text-gray-600 mb-1">Company</label>
+                        <input value={o.company || ''} onChange={e => updateOffer(i, 'company', e.target.value)} className="w-full border border-gray-300 rounded-lg px-2 py-1.5 text-sm" />
+                      </div>
+                      <div>
+                        <label className="block text-xs text-gray-600 mb-1">Type</label>
+                        <select value={o.offerType || 'FT'} onChange={e => updateOffer(i, 'offerType', e.target.value)} className="w-full border border-gray-300 rounded-lg px-2 py-1.5 text-sm">
+                          <option value="FT">FT</option>
+                          <option value="IT">IT</option>
+                          <option value="SI">SI</option>
+                          <option value="IT+FT">IT+FT</option>
+                          <option value="IT+PBC">IT+PBC</option>
+                          <option value="SI+IT+FT">SI+IT+FT</option>
+                        </select>
+                      </div>
+                      <div className="col-span-2">
+                        <label className="block text-xs text-gray-600 mb-1">Role</label>
+                        <input value={o.jobRole || ''} onChange={e => updateOffer(i, 'jobRole', e.target.value)} className="w-full border border-gray-300 rounded-lg px-2 py-1.5 text-sm" />
+                      </div>
+                      <div>
+                        <label className="block text-xs text-gray-600 mb-1">CTC (LPA)</label>
+                        <input type="number" step="0.01" value={o.ctcLpa || ''} onChange={e => updateOffer(i, 'ctcLpa', e.target.value)} className="w-full border border-gray-300 rounded-lg px-2 py-1.5 text-sm" />
+                      </div>
+                      <div>
+                        <label className="block text-xs text-gray-600 mb-1">Stipend (PM)</label>
+                        <input type="number" step="0.01" value={o.stipendPerMonth || ''} onChange={e => updateOffer(i, 'stipendPerMonth', e.target.value)} className="w-full border border-gray-300 rounded-lg px-2 py-1.5 text-sm" />
+                      </div>
+                      <div className="text-right">
+                        <button onClick={() => removeOffer(i)} className="text-red-600 text-sm">Remove</button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="flex justify-end gap-3">
+                <button onClick={() => { setIsEditing(false); setEditingStudent(null); }} className="px-4 py-2 text-gray-600">Cancel</button>
+                <button onClick={saveStudentEdits} className="px-4 py-2 bg-blue-600 text-white rounded-lg">Save Student</button>
+              </div>
             </div>
           </motion.div>
         </div>

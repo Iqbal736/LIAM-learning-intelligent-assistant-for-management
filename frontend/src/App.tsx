@@ -11,7 +11,7 @@ import Home from './pages/Home.tsx';
 import Chat from './pages/Chat.tsx';
 import Faculty from './pages/Faculty.tsx';
 import Courses from './pages/Courses.tsx';
-import Calendar from './pages/Calendar.tsx';
+import Placements from './pages/Placements.tsx';
 import Infrastructure from './pages/Infrastructure.tsx';
 import About from './pages/About.tsx';
 import Admin from './pages/Admin.tsx';
@@ -59,7 +59,7 @@ function App() {
                 <Route path="/chat" element={<Chat />} />
                 <Route path="/faculty" element={<Faculty />} />
                 <Route path="/courses" element={<Courses />} />
-                <Route path="/calendar" element={<Calendar />} />
+                <Route path="/placements" element={<Placements />} />
                 <Route path="/infrastructure" element={<Infrastructure />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/admin" element={<Admin />} />

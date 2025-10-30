@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Bot, Users, BookOpen, Calendar, Building2, Info, Moon, Sun, Shield } from 'lucide-react';
+import { Menu, X, Bot, Users, BookOpen, Briefcase, Building2, Info, Moon, Sun, Shield } from 'lucide-react';
 import { motion } from 'framer-motion';
 import BMSCELogo from './BMSCELogo.tsx';
 
@@ -18,7 +18,7 @@ const Navbar: React.FC<NavbarProps> = ({ darkMode, toggleDarkMode }) => {
     { name: 'Chat', href: '/chat', icon: Bot },
     { name: 'Faculty', href: '/faculty', icon: Users },
     { name: 'Courses', href: '/courses', icon: BookOpen },
-    { name: 'Calendar', href: '/calendar', icon: Calendar },
+    { name: 'Placements', href: '/placements', icon: Briefcase },
     { name: 'Infrastructure', href: '/infrastructure', icon: Building2 },
     { name: 'About', href: '/about', icon: Info },
     { name: 'Admin', href: '/admin', icon: Shield },

@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   Bot, 
   Users, 
   BookOpen, 
-  Calendar, 
+  Briefcase, 
   Building2, 
   MessageCircle,
   ArrowRight,
@@ -39,10 +39,10 @@ const Home: React.FC = () => {
       color: 'from-indigo-500 to-purple-600'
     },
     {
-      icon: Calendar,
-      title: 'Academic Calendar',
-      description: 'Stay updated with important dates and examination schedules',
-      link: '/calendar',
+      icon: Briefcase,
+      title: 'Placements',
+      description: 'See our placements highlights, top recruiters and packages',
+      link: '/placements',
       color: 'from-cyan-500 to-blue-600'
     },
     {
@@ -60,6 +60,17 @@ const Home: React.FC = () => {
     { label: 'Research Areas', value: '15+', icon: TrendingUp },
     { label: 'Labs & Facilities', value: '10+', icon: Building2 }
   ];
+
+  const [placementStats, setPlacementStats] = useState<any>(null);
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch('/api/placements/stats');
+        const json = await res.json();
+        setPlacementStats(json.data);
+      } catch {}
+    })();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 relative overflow-hidden">
@@ -298,6 +309,48 @@ const Home: React.FC = () => {
       {/* Stats Section */}
       <section className="py-20 bg-white/50 backdrop-blur-sm dark:bg-gray-800/50 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {placementStats && (
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="mb-10"
+            >
+              <div className="bg-gradient-to-r from-purple-600 to-pink-500 rounded-3xl p-6 text-white shadow-xl">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <div>
+                    <div className="text-sm opacity-90">Placements {placementStats.year}</div>
+                    <div className="text-2xl md:text-3xl font-extrabold">Outstanding Results</div>
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                    <div>
+                      <div className="text-3xl font-bold">{placementStats.totalPlacements}</div>
+                      <div className="text-xs opacity-90">Total Placements</div>
+                    </div>
+                    <div>
+                      <div className="text-3xl font-bold">{placementStats.ctc?.highest ?? '—'}</div>
+                      <div className="text-xs opacity-90">Highest CTC (LPA)</div>
+                    </div>
+                    <div>
+                      <div className="text-3xl font-bold">{placementStats.numCompanies}</div>
+                      <div className="text-xs opacity-90">Recruiters</div>
+                    </div>
+                    <div>
+                      <div className="text-3xl font-bold">{placementStats.fullTimeOffers}</div>
+                      <div className="text-xs opacity-90">FT Offers</div>
+                    </div>
+                  </div>
+                  <div>
+                    <Link to="/placements" className="inline-flex items-center gap-2 bg-white text-purple-600 px-4 py-2 rounded-2xl font-semibold shadow-md hover:shadow-lg">
+                      Explore Placements
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
           <motion.div 
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}

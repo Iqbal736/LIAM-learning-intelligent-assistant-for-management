@@ -54,6 +54,108 @@ class AIMLAgent {
     this.startServer();
   }
 
+  computePlacementStats(placementsData, yearKey = null) {
+    try {
+      const dataset = placementsData.years && yearKey ? placementsData.years[yearKey] : placementsData;
+      const isLegacy = !!dataset.tier1Placements || !!dataset.placementDetails;
+
+      const tier1Companies = isLegacy ? (dataset.tier1Placements?.companies || []) : [];
+      const tier2Companies = isLegacy ? (dataset.tier2Placements?.companies || []) : [];
+      const studentsLegacy = isLegacy ? (dataset.placementDetails?.studentPlacements || []) : [];
+      const studentsNew = !isLegacy ? (dataset.students || []) : [];
+
+      const uniqueCompanies = new Set();
+      tier1Companies.forEach(c => uniqueCompanies.add(c.companyName));
+      tier2Companies.forEach(c => uniqueCompanies.add(c.companyName));
+      if (isLegacy) {
+        (dataset.placementDetails?.topRecruitingCompanies || []).forEach(c => uniqueCompanies.add(c.companyName));
+      } else {
+        studentsNew.forEach(s => (s.offers || []).forEach(o => uniqueCompanies.add(o.company)));
+      }
+
+      const companyOfferCounts = {};
+      if (isLegacy) {
+        [...tier1Companies, ...tier2Companies].forEach(c => {
+          companyOfferCounts[c.companyName] = (companyOfferCounts[c.companyName] || 0) + (c.students?.length || 0);
+        });
+      } else {
+        studentsNew.forEach(s => (s.offers || []).forEach(o => {
+          companyOfferCounts[o.company] = (companyOfferCounts[o.company] || 0) + 1;
+        }));
+      }
+
+      // Parse CTC numbers from details like '18.6 CTC', '11 CTC'
+      const ctcValues = [];
+      let internshipsCount = 0;
+      let multipleOffersCount = 0;
+
+      if (isLegacy) {
+        studentsLegacy.forEach(s => {
+          const details = String(s.details || '');
+          const ctcMatches = [...details.matchAll(/(\d+(?:\.\d+)?)\s*CTC/gi)];
+          if (ctcMatches.length > 0) ctcMatches.forEach(m => ctcValues.push(parseFloat(m[1])));
+          if (/internship/i.test(details)) internshipsCount += 1;
+          if (/,| and |\)|\(/.test(details) && (details.match(/CTC/gi)?.length || 0) > 1) multipleOffersCount += 1;
+        });
+      } else {
+        studentsNew.forEach(s => {
+          const offers = s.offers || [];
+          if (offers.length > 1) multipleOffersCount += 1;
+          offers.forEach(o => {
+            if (o.ctcLpa) ctcValues.push(Number(o.ctcLpa));
+            if ((o.offerType || '').toLowerCase().includes('si') || (o.stipendPerMonth || o.stipendLumpsum)) internshipsCount += 1;
+          });
+        });
+      }
+
+      const highestCTC = ctcValues.length ? Math.max(...ctcValues) : null;
+      const lowestCTC = ctcValues.length ? Math.min(...ctcValues) : null;
+      const averageCTC = ctcValues.length ? parseFloat((ctcValues.reduce((a, b) => a + b, 0) / ctcValues.length).toFixed(2)) : null;
+
+      const totalTier1 = isLegacy ? tier1Companies.reduce((s, c) => s + (c.students?.length || 0), 0) : null;
+      const totalTier2 = isLegacy ? tier2Companies.reduce((s, c) => s + (c.students?.length || 0), 0) : null;
+      let totalPlacements = null;
+      let fullTimeOffers = null;
+      if (isLegacy) {
+        const rawTotal = dataset.placementDetails?.summaryStats?.totalPlacements;
+        totalPlacements = rawTotal ? parseInt(rawTotal) : (totalTier1 + totalTier2);
+        const rawFull = dataset.placementDetails?.summaryStats?.fullTimeOffers;
+        fullTimeOffers = rawFull ? parseInt(rawFull) : 0;
+      } else {
+        // For 2025 data, count unique students with at least one FT offer as placements
+        const placed = new Set();
+        let ftOffers = 0;
+        studentsNew.forEach(s => {
+          const hasFt = (s.offers || []).some(o => (o.offerType || '').toUpperCase().includes('FT'));
+          if (hasFt) placed.add(s.usn || s.name);
+          ftOffers += (s.offers || []).filter(o => (o.offerType || '').toUpperCase().includes('FT')).length;
+        });
+        totalPlacements = placed.size;
+        fullTimeOffers = ftOffers;
+      }
+
+      const offersByCompany = Object.entries(companyOfferCounts)
+        .map(([name, value]) => ({ name, value }))
+        .sort((a, b) => b.value - a.value);
+
+      return {
+        year: isLegacy ? 2024 : Number(yearKey),
+        totalPlacements,
+        fullTimeOffers,
+        internshipsCount,
+        numCompanies: uniqueCompanies.size,
+        tier1Offers: totalTier1,
+        tier2Offers: totalTier2,
+        multipleOffersCount,
+        ctc: { highest: highestCTC, average: averageCTC, lowest: lowestCTC, currency: 'LPA' },
+        offersByCompany,
+      };
+    } catch (err) {
+      console.warn('Failed to compute placement stats:', err.message);
+      return null;
+    }
+  }
+
   setupMiddleware() {
     this.app.use(cors());
     this.app.use(express.json());
@@ -90,6 +192,25 @@ class AIMLAgent {
         });
       }
       this.knowledgeBase.calendar = allEvents;
+
+      // Load placements data
+      try {
+        const placementsData = JSON.parse(fs.readFileSync(path.join(__dirname, 'data/comprehensive_placements.json'), 'utf8'));
+        this.knowledgeBase.placements = placementsData;
+        // Compute stats per year if provided
+        const years = placementsData.years ? Object.keys(placementsData.years) : ['2024'];
+        const byYear = {};
+        years.forEach(y => {
+          byYear[y] = this.computePlacementStats(placementsData, y);
+        });
+        this.knowledgeBase.placementStats = { byYear };
+        this.knowledgeBase.latestPlacementYear = years.sort().slice(-1)[0];
+      } catch (e) {
+        console.warn('⚠️ Placements data not found or invalid, continuing without placements');
+        this.knowledgeBase.placements = null;
+        this.knowledgeBase.placementStats = null;
+        this.knowledgeBase.latestPlacementYear = null;
+      }
       
       console.log('🧠 Comprehensive Knowledge Base Built:');
       console.log(`   📊 Faculty: ${this.knowledgeBase.faculty.length} members`);
@@ -97,6 +218,13 @@ class AIMLAgent {
       console.log(`   🏢 Infrastructure: ${this.knowledgeBase.infrastructure.labs.length} labs`);
       console.log(`   👥 Students: ${this.knowledgeBase.students.totalStudents} students`);
       console.log(`   📅 Calendar: ${this.knowledgeBase.calendar.length} events`);
+      if (this.knowledgeBase.placements) {
+        const latest = this.knowledgeBase.latestPlacementYear;
+        const stat = this.knowledgeBase.placementStats?.byYear?.[latest];
+        if (stat) {
+          console.log(`   💼 Placements ${latest}: ${stat.totalPlacements} (Tier-1: ${stat.tier1Offers || '—'}, Tier-2: ${stat.tier2Offers || '—'})`);
+        }
+      }
       
     } catch (error) {
       console.error('❌ Error loading knowledge base:', error.message);
@@ -225,6 +353,53 @@ class AIMLAgent {
       // Return the full calendar object, not just events
       const calendarData = JSON.parse(fs.readFileSync(path.join(__dirname, 'data/comprehensive_academic_calendar.json'), 'utf8'));
       res.json({ data: calendarData });
+    });
+
+    // Placements routes
+    this.app.get('/api/placements', (req, res) => {
+      if (!this.knowledgeBase.placements) {
+        return res.status(404).json({ error: 'Placements data not available' });
+      }
+      res.json({ data: this.knowledgeBase.placements });
+    });
+
+    this.app.put('/api/placements', (req, res) => {
+      try {
+        const newData = req.body;
+        if (typeof newData !== 'object' || !newData) {
+          return res.status(400).json({ error: 'Invalid placements payload' });
+        }
+        const filePath = path.join(__dirname, 'data/comprehensive_placements.json');
+        fs.writeFileSync(filePath, JSON.stringify(newData, null, 2));
+        // Reload in-memory structures
+        this.knowledgeBase.placements = newData;
+        const years = newData.years ? Object.keys(newData.years) : [];
+        const byYear = {};
+        years.forEach(y => {
+          byYear[y] = this.computePlacementStats(newData, y);
+        });
+        this.knowledgeBase.placementStats = { byYear };
+        this.knowledgeBase.latestPlacementYear = years.sort().slice(-1)[0] || null;
+        return res.json({ success: true });
+      } catch (e) {
+        console.error('Failed to save placements:', e);
+        return res.status(500).json({ error: 'Failed to save placements' });
+      }
+    });
+
+    this.app.get('/api/placements/stats', (req, res) => {
+      if (!this.knowledgeBase.placementStats) {
+        return res.status(404).json({ error: 'Placement stats not available' });
+      }
+      const { year } = req.query;
+      const byYear = this.knowledgeBase.placementStats.byYear || {};
+      if (year && byYear[String(year)]) {
+        return res.json({ data: byYear[String(year)] });
+      }
+      // default: latest year
+      const years = Object.keys(byYear).sort();
+      const latest = years[years.length - 1];
+      return res.json({ data: byYear[latest] });
     });
 
     // AI Chat route
@@ -541,6 +716,18 @@ ${context.infrastructure.labs.map(lab => `
   Special Features: ${lab.specialFeatures.join(', ')}
 `).join('')}
 
+PLACEMENTS DATA:
+${context.placementStats && context.latestPlacementYear ? `
+LATEST YEAR: ${context.latestPlacementYear}
+• Total Placements: ${context.placementStats.byYear[context.latestPlacementYear]?.totalPlacements}
+• Full-time Offers: ${context.placementStats.byYear[context.latestPlacementYear]?.fullTimeOffers}
+• Companies: ${context.placementStats.byYear[context.latestPlacementYear]?.numCompanies}
+• Highest/Avg/Lowest CTC (LPA): ${context.placementStats.byYear[context.latestPlacementYear]?.ctc?.highest}/${context.placementStats.byYear[context.latestPlacementYear]?.ctc?.average}/${context.placementStats.byYear[context.latestPlacementYear]?.ctc?.lowest}
+• Tier-1 vs Tier-2 Offers: ${context.placementStats.byYear[context.latestPlacementYear]?.tier1Offers || '—'} vs ${context.placementStats.byYear[context.latestPlacementYear]?.tier2Offers || '—'}
+TOP RECRUITERS (by offers):
+${(context.placementStats.byYear[context.latestPlacementYear]?.offersByCompany || []).slice(0,10).map(c => `• ${c.name} - ${c.value}`).join('\n')}
+` : 'Placements data not available'}
+
 STUDENTS DATA:
 Total Students: ${context.students.totalStudents}
 Batch-wise Distribution:
@@ -732,6 +919,50 @@ RESPONSE:`;
     
     // Enhanced context-aware responses
     switch (intent) {
+      case 'placements_query': {
+        if (!context.placements) {
+          return {
+            response: 'Placements data is currently unavailable.',
+            suggestions: ['Show faculty information', 'Show courses', 'Show infrastructure'],
+            intent,
+            extractedInfo,
+            source: 'intelligent_fallback'
+          };
+        }
+
+        const tier1 = context.placements.tier1Placements?.companies || [];
+        const tier2 = context.placements.tier2Placements?.companies || [];
+        const totalTier1 = tier1.reduce((s, c) => s + (c.students?.length || 0), 0);
+        const totalTier2 = tier2.reduce((s, c) => s + (c.students?.length || 0), 0);
+        const summary = context.placements.placementDetails2024?.summaryStats || {};
+        const topCompanies = context.placements.placementDetails2024?.topRecruitingCompanies || [];
+
+        let topList = topCompanies.map(c => `• ${c.companyName}${c.offersMade ? ` - ${c.offersMade} offers` : ''}`).slice(0, 8).join('\n');
+        if (!topList) {
+          const combined = [...tier1, ...tier2]
+            .sort((a,b) => (b.students?.length||0) - (a.students?.length||0))
+            .slice(0,8)
+            .map(c => `• ${c.companyName} - ${(c.students?.length||0)} offers`)
+            .join('\n');
+          topList = combined;
+        }
+
+        const response = `**AIML Placements Highlights (2024):**\n\n`+
+          `• Total Placements: ${summary.totalPlacements || (totalTier1 + totalTier2)}\n`+
+          `• Full-time Offers: ${summary.fullTimeOffers || '—'}\n`+
+          `• Tier-1 Offers: ${totalTier1}\n`+
+          `• Tier-2 Offers: ${totalTier2}\n\n`+
+          `**Top Recruiters:**\n${topList}\n\n`+
+          `Our students secured roles across leading product and services companies with excellent compensation packages and strong internship-to-ppo conversions.`;
+
+        const suggestions = [
+          'Show Tier-1 companies and selected students',
+          'Show Tier-2 companies and offers count',
+          'Who got the highest package?'
+        ];
+
+        return { response, suggestions, intent, extractedInfo, source: 'intelligent_fallback' };
+      }
              case 'greeting':
                response = `Hello! I'm LIAM, the AI assistant for the AIML Department at BMSCE. I can help you with:
 
@@ -1511,6 +1742,10 @@ Contact these faculty members for computer vision guidance and research opportun
     if (lowerMessage.includes('show') && lowerMessage.includes('faculty') || lowerMessage.includes('all faculty')) {
       return 'faculty_listing';
     }
+    // Placements query detection
+    if (lowerMessage.includes('placement') || lowerMessage.includes('placed') || lowerMessage.includes('offer') || lowerMessage.includes('package') || lowerMessage.includes('recruiter') || lowerMessage.includes('company') || lowerMessage.includes('internship')) {
+      return 'placements_query';
+    }
     // Student query detection
     if (lowerMessage.includes('student') || lowerMessage.includes('usn') || lowerMessage.includes('batch') || 
         lowerMessage.includes('aashish') || lowerMessage.includes('rahul') || 
@@ -1599,7 +1834,10 @@ Contact these faculty members for computer vision guidance and research opportun
       courses: this.knowledgeBase.courses,
       infrastructure: this.knowledgeBase.infrastructure,
       students: this.knowledgeBase.students,
-      calendar: this.knowledgeBase.calendar
+      calendar: this.knowledgeBase.calendar,
+      placements: this.knowledgeBase.placements,
+      placementStats: this.knowledgeBase.placementStats,
+      latestPlacementYear: this.knowledgeBase.latestPlacementYear
     };
   }
 

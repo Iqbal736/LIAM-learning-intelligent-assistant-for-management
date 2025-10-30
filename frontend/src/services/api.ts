@@ -232,6 +232,32 @@ export const infrastructureApi = {
   },
 };
 
+// Placements API
+export interface PlacementsData {
+  tier1Placements: {
+    title: string;
+    companies: { companyName: string; students: string[] }[];
+  };
+  tier2Placements: {
+    title: string;
+    companies: { companyName: string; students: string[] }[];
+  };
+  placementDetails2024: {
+    title: string;
+    summaryStats: { totalPlacements: string; fullTimeOffers: string };
+    topRecruitingCompanies: { companyName: string; offersMade?: string | null; logoUrl?: string }[];
+    studentPlacements: { usn: string | null; fullName: string; details: string }[];
+    offCampusInternships: { title: string; internships: any[] };
+  };
+}
+
+export const placementsApi = {
+  getAll: async (): Promise<ApiResponse<PlacementsData>> => {
+    const response = await api.get('/placements');
+    return response.data;
+  },
+};
+
 // AI API
 export const aiApi = {
   chat: async (message: string, history: ChatMessage[] = []): Promise<ApiResponse<AIResponse>> => {
