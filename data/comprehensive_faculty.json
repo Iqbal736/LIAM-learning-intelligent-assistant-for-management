@@ -891,26 +891,6 @@
     "updatedAt": "2024-01-01T00:00:00.000Z"
   },
   {
-    "id": "faculty_1759930275659",
-    "name": "M P Harshitha",
-    "title": "M P Harshitha",
-    "designation": "B.Tech",
-    "qualification": "MS (AIML)",
-    "email": "mpharshitha.ai23@bmsce.ac.in",
-    "phone": "8088603742",
-    "office": "7th floor",
-    "createdAt": "2025-10-08T13:31:15.659Z"
-  },
-  {
-    "id": "faculty_1760029071421",
-    "name": "M D Iqbal",
-    "title": "M D Iqbal",
-    "designation": "Professor",
-    "qualification": "Masters in AIML",
-    "email": "mdiqbal@gmail.com",
-    "createdAt": "2025-10-09T16:57:51.421Z"
-  },
-  {
     "id": "faculty_sumatn",
     "name": "Prof. Suma T N",
     "designation": "Assistant Professor",

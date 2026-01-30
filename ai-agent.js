@@ -795,34 +795,81 @@ RESPONSE:`;
       
       // Use REST API directly with retry logic
       const apiKey = process.env.GEMINI_API_KEY || 'AIzaSyBQmFySnKjg0GbjYHvUI6Pfpl-9e2GYYTY';
-      const response = await this.retryWithBackoff(async () => {
-        const apiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            contents: [{
-              parts: [{
-                text: prompt
-              }]
-            }],
-            generationConfig: {
-              temperature: 0.7,
-              topP: 0.9,
-              maxOutputTokens: 800,
-            }
-          })
-        });
+      
+      // Try multiple models - using models available for this API key
+      const modelConfigs = [
+        { model: 'gemini-2.5-flash', version: 'v1beta' },
+        { model: 'gemini-2.5-pro', version: 'v1beta' },
+        { model: 'gemini-2.0-flash', version: 'v1beta' },
+        { model: 'gemini-2.0-flash-exp', version: 'v1beta' },
+      ];
+      let response = null;
+      let lastError = null;
+      
+      for (const { model: modelName, version } of modelConfigs) {
+        try {
+          console.log(`🔄 Trying model: ${modelName} (${version})...`);
+          response = await this.retryWithBackoff(async () => {
+            const apiResponse = await fetch(`https://generativelanguage.googleapis.com/${version}/models/${modelName}:generateContent?key=${apiKey}`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                contents: [{
+                  parts: [{
+                    text: prompt
+                  }]
+                }],
+                generationConfig: {
+                  temperature: 0.7,
+                  topP: 0.9,
+                  maxOutputTokens: 800,
+                }
+              })
+            });
 
-        if (!apiResponse.ok) {
-          throw new Error(`HTTP ${apiResponse.status}: ${apiResponse.statusText}`);
+            if (!apiResponse.ok) {
+              let errorMsg = `HTTP ${apiResponse.status}: ${apiResponse.statusText}`;
+              try {
+                const errorData = await apiResponse.json();
+                if (errorData.error && errorData.error.message) {
+                  errorMsg += ` - ${errorData.error.message}`;
+                }
+              } catch (e) {
+                // If JSON parsing fails, just use status text
+              }
+              throw new Error(errorMsg);
+            }
+            
+            return apiResponse;
+          });
+          console.log(`✅ Successfully connected to ${modelName} (${version})`);
+          break; // Success, exit the loop
+        } catch (error) {
+          console.log(`❌ ${modelName} failed: ${error.message}`);
+          lastError = error;
+          response = null;
+          // Continue to next model
         }
-        
-        return apiResponse;
-      });
+      }
+      
+      if (!response) {
+        throw lastError || new Error('All Gemini models failed');
+      }
 
       const data = await response.json();
+      
+      // Log the full response structure for debugging
+      if (!data.candidates || !data.candidates[0]) {
+        console.error('❌ Gemini API response structure error:', JSON.stringify(data, null, 2));
+        return null;
+      }
+      
+      if (data.candidates[0].finishReason && data.candidates[0].finishReason !== 'STOP') {
+        console.error('❌ Gemini API finish reason:', data.candidates[0].finishReason, data.candidates[0].safetyRatings);
+        return null;
+      }
       
       if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts) {
         const text = data.candidates[0].content.parts[0].text;
@@ -900,7 +947,8 @@ RESPONSE:`;
           response: mainResponse,
           suggestions: suggestions,
           intent: intent,
-          extractedInfo: extractedInfo
+          extractedInfo: extractedInfo,
+          source: 'gemini'
         };
       }
     } catch (error) {

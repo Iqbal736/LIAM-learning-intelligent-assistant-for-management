@@ -1,4 +1,4 @@
-# AIML Department AI Agent - BMSCE
+git init# AIML Department AI Agent - BMSCE
 
 A smart website for the AIML Department with an AI chatbot named LIAM that can answer questions about faculty, courses, and department information.
 
